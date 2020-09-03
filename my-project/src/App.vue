@@ -1,20 +1,20 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <app-header></app-header>
     <router-view></router-view>
-    <hello-world></hello-world>
   </div>
 </template>
 
 <script>
-import Header from './Header'
-import HelloWorld from './components/HelloWorld'
+import Header from './components/Header'
 export default {
+  name: 'App',
   components: {
-    HelloWorld,
     appHeader: Header
   },
-  name: 'App'
+  created () {
+    this.$store.dispatch('initStocks')
+  }
 }
 </script>
 
