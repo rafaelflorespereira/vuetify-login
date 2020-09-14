@@ -1,5 +1,7 @@
 <template>
-  <div class="row">
+<div>
+  <h5 v-show="stocks.length <= 0" class="mt-4">Go invest your money in the stocks table</h5>
+  <div class="row px-4">
     <my-stock
               v-for="stock in stocks"
               :key="stock.id"
@@ -7,6 +9,8 @@
               >
               </my-stock>
   </div>
+</div>
+
 </template>
 
 <script>

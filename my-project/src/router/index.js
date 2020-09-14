@@ -3,12 +3,17 @@ import Router from 'vue-router'
 
 import Portfolio from '../components/portfolio/Portfolio'
 import Stocks from '../components/stocks/Stocks'
+import Home from '../components/Home'
 
 Vue.use(Router)
 
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/',
+      component: Home
+    },
     {
       path: '/portfolio',
       component: Portfolio

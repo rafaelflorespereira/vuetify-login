@@ -9,7 +9,17 @@ const mutations = {
   'SET_STOCKS' (state, stocks) {
     state.stocks = stocks
   },
-  'RND_STOCKS' () {
+  'RND_STOCKS' (state) {
+    state.stocks.forEach(stock => {
+      var constant
+      if (stock.price > 1) {
+        constant = 0.5
+        stock.price = Math.round(stock.price * (Math.random() + constant))
+      } else {
+        constant = 1
+        stock.price = Math.round(stock.price * (Math.random() + constant))
+      }
+    })
   }
 }
 

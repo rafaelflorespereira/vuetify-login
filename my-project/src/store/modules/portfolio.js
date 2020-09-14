@@ -26,6 +26,12 @@ const mutations = {
       record.quantity -= quantity
       state.funds += stockPrice * quantity
     }
+  },
+  'SET_FUNDS' (state, funds) {
+    state.funds = funds
+  },
+  'SET_PORTFOLIO' (state, portfolio) {
+    state.stocks = portfolio
   }
 }
 
