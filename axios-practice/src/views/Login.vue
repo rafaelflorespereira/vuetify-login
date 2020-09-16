@@ -1,66 +1,66 @@
 <template>
-  <form>
-    <v-col
-      justify="center"
-      align="center"
-    >
-    <h1>Login Page</h1>
-    <v-card
-      width="30%"
-    >
-    <v-card-text>
-    <v-text-field
-        v-model="name"
-        :error-messages="nameErrors"
-        :counter="10"
-        label="Name"
-        required
-        @input="$v.name.$touch()"
-        @blur="$v.name.$touch()"
-        append-outer-icon="mdi-account-circle"
-      ></v-text-field>
+<v-row justify="center">
+  <v-col
+      cols="3"
+      align="center">
+    <form>
+      <h1>Login Page</h1>
+      <v-card>
+      <v-card-text>
       <v-text-field
-        v-model="email"
-        :error-messages="emailErrors"
-        label="E-mail"
-        required
-        @input="$v.email.$touch()"
-        @blur="$v.email.$touch()"
-        append-outer-icon="mdi-email"
-      ></v-text-field>
-      <v-select
-        v-model="select"
-        :items="items"
-        :error-messages="selectErrors"
-        label="Item"
-        required
-        @change="$v.select.$touch()"
-        @blur="$v.select.$touch()"
-      ></v-select>
-      <v-checkbox
-        v-model="checkbox"
-        :error-messages="checkboxErrors"
-        label="Do you agree?"
-        required
-        @change="$v.checkbox.$touch()"
-        @blur="$v.checkbox.$touch()"
-      ></v-checkbox>
-        <v-btn
-          @click="submit"
-          color="success"
-        >
-          submit
-        </v-btn>
-        <v-btn
-          @click="clear"
-          color="error"
-        >
-          clear
+          v-model="name"
+          :error-messages="nameErrors"
+          :counter="10"
+          label="Name"
+          required
+          @input="$v.name.$touch()"
+          @blur="$v.name.$touch()"
+          append-outer-icon="mdi-account-circle"
+        ></v-text-field>
+        <v-text-field
+          v-model="email"
+          :error-messages="emailErrors"
+          label="E-mail"
+          required
+          @input="$v.email.$touch()"
+          @blur="$v.email.$touch()"
+          append-outer-icon="mdi-email"
+        ></v-text-field>
+        <v-select
+          v-model="select"
+          :items="items"
+          :error-messages="selectErrors"
+          label="Item"
+          required
+          @change="$v.select.$touch()"
+          @blur="$v.select.$touch()"
+        ></v-select>
+        <v-checkbox
+          v-model="checkbox"
+          :error-messages="checkboxErrors"
+          label="Do you agree?"
+          required
+          @change="$v.checkbox.$touch()"
+          @blur="$v.checkbox.$touch()"
+        ></v-checkbox>
+          <v-btn
+            @click="submit"
+            color="success"
+          >
+            submit
           </v-btn>
-      </v-card-text>
-    </v-card>
-    </v-col>
-  </form>
+          <v-btn
+            @click="clear"
+            color="error"
+          >
+            clear
+            </v-btn>
+        </v-card-text>
+      </v-card>
+    </form>
+  </v-col>
+</v-row>
+
 </template>
 
 <script>

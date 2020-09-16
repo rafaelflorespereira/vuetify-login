@@ -1,13 +1,15 @@
 <template>
-  <div>
+  <v-row justify-lg="start" justify-md="center">
+    <v-col md="8" lg="6">
     <h1>Dashboard</h1>
-    <v-data-table
-        :headers="headers"
-        :items="desserts"
-        :items-per-page="5"
-        class="elevation-1"
-    ></v-data-table>
-  </div>
+      <v-data-table
+          :headers="headers"
+          :items="desserts"
+          :items-per-page="5"
+          class="elevation-1"
+      ></v-data-table>
+    </v-col>
+  </v-row>
 </template>
 
 <script>

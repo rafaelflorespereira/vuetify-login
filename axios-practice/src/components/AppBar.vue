@@ -9,6 +9,7 @@
     <v-spacer></v-spacer>
     <v-btn rounded text to="/">Home</v-btn>
     <v-btn rounded text to="/login">Login</v-btn>
+    <v-btn rounded text to="/sign-up">Sign-up</v-btn>
     <v-btn rounded text to="/dashboard">Dashboard</v-btn>
   </v-app-bar>
 </template>
