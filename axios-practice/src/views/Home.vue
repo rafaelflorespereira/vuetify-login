@@ -16,7 +16,8 @@ export default {
         'Página de Login',
         'Página de SignUp',
         'Validações usando Vuelidate em ambas',
-        'Posicionamento e Dimensionamento dos objetos'
+        'Posicionamento e Dimensionamento dos objetos',
+        'Adicionar Side-bar'
       ]
     }
   }

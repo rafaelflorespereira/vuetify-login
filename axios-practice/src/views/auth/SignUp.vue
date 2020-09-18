@@ -6,19 +6,17 @@
     >
       <form>
         <h1>SignUp Page</h1>
-        <v-card
-          sm="6"
-        >
-        <v-card-text>
+        <v-card>
+          <v-card-text>
         <v-text-field
             v-model="name"
             :error-messages="nameErrors"
-            :counter="10"
+            :counter="32"
             label="Name"
             required
             @input="$v.name.$touch()"
             @blur="$v.name.$touch()"
-            append-outer-icon="mdi-account-circle"
+            prepend-icon="mdi-account-circle"
           ></v-text-field>
           <v-text-field
             v-model="email"
@@ -27,7 +25,7 @@
             required
             @input="$v.email.$touch()"
             @blur="$v.email.$touch()"
-            append-outer-icon="mdi-email"
+            prepend-icon="mdi-email"
           ></v-text-field>
           <v-text-field
             v-model="emailConfirm"
@@ -36,23 +34,31 @@
             required
             @input="$v.emailConfirm.$touch()"
             @blur="$v.emailConfirm.$touch()"
-            append-outer-icon="mdi-email"
+            prepend-icon="mdi-email"
           ></v-text-field>
           <v-text-field
             label="Password"
+            v-model="password"
+            :type="passwordType"
+            prepend-icon="mdi-key"
+            :append-outer-icon="eyeIcon"
             :error-messages="passwordErrors"
-            required
+            @click:append-outer="togglePasswordVisible"
             @input="$v.password.$touch()"
             @blur="$v.password.$touch()"
-            append-outer-icon="mdi-key"
+            required
           ></v-text-field>
           <v-text-field
             label="Confirm Password"
+            v-model="passwordConfirm"
+            :type="passwordType"
             :error-messages="passwordConfirmErrors"
-            required
+            prepend-icon="mdi-key"
+            :append-outer-icon="eyeIcon"
             @input="$v.passwordConfirm.$touch()"
             @blur="$v.passwordConfirm.$touch()"
-            append-outer-icon="mdi-key"
+            @click:append-outer="togglePasswordVisible"
+            required
           ></v-text-field>
           <v-select
             v-model="select"
@@ -71,6 +77,7 @@
             @change="$v.checkbox.$touch()"
             @blur="$v.checkbox.$touch()"
           ></v-checkbox>
+          <v-row justify="space-around">
             <v-btn
               @click="submit"
               color="success"
@@ -82,7 +89,9 @@
               color="error"
             >
               clear
-              </v-btn>
+            </v-btn>
+            <v-btn color="secondary" outlined to="/login">Sign in</v-btn>
+          </v-row>
           </v-card-text>
         </v-card>
       </form>
@@ -91,6 +100,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { validationMixin } from 'vuelidate'
 import { required, maxLength, email, sameAs, minLength, alphaNum } from 'vuelidate/lib/validators'
 
@@ -98,9 +108,9 @@ export default {
   mixins: [validationMixin],
 
   validations: {
-    name: { required, maxLength: maxLength(10) },
+    name: { required, maxLength: maxLength(32) },
     email: { required, email },
-    emailConfirm: { required, email, sameAsEmail: sameAs('email') },
+    emailConfirm: { sameAsEmail: sameAs('email') },
     password: { required, minLength: minLength(8), alphaNum },
     passwordConfirm: { sameAsPassword: sameAs('password') },
     select: { required },
@@ -118,6 +128,8 @@ export default {
     password: '',
     passwordConfirm: '',
     select: null,
+    passwordType: 'password',
+    eyeIcon: 'mdi-eye-off',
     items: [
       'Item 1',
       'Item 2',
@@ -143,7 +155,7 @@ export default {
     nameErrors () {
       const errors = []
       if (!this.$v.name.$dirty) return errors
-      !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
+      !this.$v.name.maxLength && errors.push('Name must be at most 32 characters long')
       !this.$v.name.required && errors.push('Name is required.')
       return errors
     },
@@ -157,17 +169,15 @@ export default {
     emailConfirmErrors () {
       const errors = []
       if (!this.$v.emailConfirm.$dirty) return errors
-      !this.$v.emailConfirm.email && errors.push('Must be valid e-mail')
-      !this.$v.emailConfirm.required && errors.push('E-mail is required')
-      !this.$v.emailConfirm.sameAsEmail && errors.push('E-mails must be the same')
+      !this.$v.emailConfirm.sameAsEmail && errors.push('E-mails must match')
       return errors
     },
     passwordErrors () {
       const errors = []
       if (!this.$v.password.$dirty) return errors
-      !this.$v.password.required && errors.push('Password is required')
       !this.$v.password.minLength && errors.push('Password is 8 characters minimum')
       !this.$v.password.alphaNum && errors.push('Password must have numbers and symbols')
+      !this.$v.password.required && errors.push('Password is required')
       return errors
     },
     passwordConfirmErrors () {
@@ -179,8 +189,12 @@ export default {
   },
 
   methods: {
+    ...mapActions([
+      'signUp'
+    ]),
     submit () {
       this.$v.$touch()
+      this.signUp({ email: this.email, password: this.password })
     },
     clear () {
       this.$v.$reset()
@@ -191,6 +205,15 @@ export default {
       this.passwordConfirm = ''
       this.select = null
       this.checkbox = false
+    },
+    togglePasswordVisible () {
+      if (this.passwordType === 'password') {
+        this.passwordType = 'text'
+        this.eyeIcon = 'mdi-eye'
+      } else {
+        this.passwordType = 'password'
+        this.eyeIcon = 'mdi-eye-off'
+      }
     }
   }
 }
