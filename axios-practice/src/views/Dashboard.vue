@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -49,16 +48,7 @@ export default {
       }
     }
   },
-  created () {
-    axios.get('https://vuejs-stock-trader-8b558.firebaseio.com/users.json')
-      .then(response => {
-        for (const key in response.data) {
-          const user = response.data[key]
-          this.users.push(user[0])
-        }
-      })
-      .catch(errors => console.log(errors))
-  },
+  created () {},
   methods: {
     selectRow (event) {
       this.snackbar.toggle = !this.snackbar.toggle

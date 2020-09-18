@@ -194,7 +194,12 @@ export default {
     ]),
     submit () {
       this.$v.$touch()
-      this.signUp({ email: this.email, password: this.password })
+      // this.$store.dispatch
+      this.signUp({
+        name: this.name,
+        email: this.email,
+        password: this.password
+      })
     },
     clear () {
       this.$v.$reset()

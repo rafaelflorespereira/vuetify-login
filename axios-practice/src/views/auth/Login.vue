@@ -73,7 +73,6 @@
         </v-card-text>
       </v-card>
     </form>
-    {{ `this is the userId: ${this.$store.getters.userId}` }}
     <v-snackbar
       v-model="isUserId"
     >
