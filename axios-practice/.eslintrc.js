@@ -4,23 +4,22 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:vue/essential',
-    'eslint:recommended',
-    '@vue/standard',
-    'plugin:prettier/recommended'
+    "plugin:vue/essential",
+    "plugin:prettier/recommended",
+    "@vue/prettier"
   ],
   parserOptions: {
-    parser: 'babel-eslint'
+    parser: "babel-eslint"
   },
   rules: {
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off"
   },
   overrides: [
     {
       files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+        "**/__tests__/*.{j,t}s?(x)",
+        "**/tests/unit/**/*.spec.{j,t}s?(x)"
       ],
       env: {
         mocha: true
@@ -28,12 +27,12 @@ module.exports = {
     },
     {
       files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
+        "**/__tests__/*.{j,t}s?(x)",
+        "**/tests/unit/**/*.spec.{j,t}s?(x)"
       ],
       env: {
         mocha: true
       }
     }
   ]
-}
+};

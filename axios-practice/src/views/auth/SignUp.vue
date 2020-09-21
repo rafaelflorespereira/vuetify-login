@@ -5,6 +5,7 @@
         <h1>SignUp Page</h1>
         <v-card>
           <v-card-text>
+            <!-- Name -->
             <v-text-field
               v-model="name"
               :error-messages="nameErrors"
@@ -15,17 +16,7 @@
               @blur="$v.name.$touch()"
               prepend-icon="mdi-account-circle"
             ></v-text-field>
-            <v-text-field
-              label="Birthday"
-              v-model="birthday"
-              :error-messages="birthdayErrors"
-              readonly
-            ></v-text-field>
-            <v-date-picker
-              elevation="12"
-              v-model="birthday"
-              :reactive="true"
-            ></v-date-picker>
+            <!-- E-mail -->
             <v-text-field
               v-model="email"
               :error-messages="emailErrors"
@@ -44,6 +35,7 @@
               @blur="$v.emailConfirm.$touch()"
               prepend-icon="mdi-email"
             ></v-text-field>
+            <!-- Password -->
             <v-text-field
               label="Password"
               v-model="password"
@@ -68,15 +60,34 @@
               @click:append-outer="togglePasswordVisible"
               required
             ></v-text-field>
-            <v-select
-              v-model="select"
-              :items="items"
-              :error-messages="selectErrors"
-              label="Item"
-              required
-              @change="$v.select.$touch()"
-              @blur="$v.select.$touch()"
-            ></v-select>
+            <!-- Country -->
+            <v-autocomplete
+              v-model="model"
+              :hint="
+                !isEditing ? 'Click the icon to edit' : 'Click the icon to save'
+              "
+              :items="countries"
+              :readonly="!isEditing"
+              :label="`Country — ${isEditing ? 'Editable' : 'Readonly'}`"
+              persistent-hint
+              prepend-icon="mdi-map"
+            >
+              <template v-slot:append-outer>
+                <v-slide-x-reverse-transition mode="out-in">
+                  <v-icon
+                    :key="`icon-${isEditing}`"
+                    :color="isEditing ? 'success' : 'info'"
+                    @click="isEditing = !isEditing"
+                    v-text="
+                      isEditing
+                        ? 'mdi-check-outline'
+                        : 'mdi-circle-edit-outline'
+                    "
+                  ></v-icon>
+                </v-slide-x-reverse-transition>
+              </template>
+            </v-autocomplete>
+
             <v-checkbox
               v-model="checkbox"
               :error-messages="checkboxErrors"
@@ -92,7 +103,7 @@
               <v-btn @click="clear" color="error">
                 clear
               </v-btn>
-              <v-btn color="secondary" outlined to="/login">Sign in</v-btn>
+              <v-btn color="secondary" outlined to="/sign-In">Sign in</v-btn>
             </v-row>
           </v-card-text>
         </v-card>
@@ -112,7 +123,7 @@ import {
   minLength,
   alphaNum
 } from "vuelidate/lib/validators";
-
+import countries from "../../data/countries";
 export default {
   mixins: [validationMixin],
 
@@ -234,6 +245,12 @@ export default {
         this.passwordType = "password";
         this.eyeIcon = "mdi-eye-off";
       }
+    }
+  },
+
+  mounted: {
+    countries() {
+      return countries;
     }
   }
 };

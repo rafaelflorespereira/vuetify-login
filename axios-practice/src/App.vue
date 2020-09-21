@@ -4,10 +4,8 @@
 
     <!-- Sizes your content based upon application components -->
     <v-main>
-
       <!-- Provides the application the proper gutter -->
       <v-container fluid>
-
         <!-- If using vue-router -->
         <router-view></router-view>
       </v-container>
@@ -20,14 +18,14 @@
 </template>
 
 <script>
-import AppBar from './components/AppBar'
-import MyFooter from './components/MyFooter'
+import AppBar from "./components/AppBar";
+import MyFooter from "./components/MyFooter";
 export default {
-  name: 'App',
+  name: "App",
 
   components: {
     AppBar,
     MyFooter
   }
-}
+};
 </script>
