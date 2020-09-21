@@ -2,21 +2,9 @@
   <v-row justify="center">
     <v-col cols="3" align="center">
       <form>
-        <h1>SignUp Page</h1>
+        <h1>Sign-In Page</h1>
         <v-card>
           <v-card-text>
-            <!-- Name -->
-            <v-text-field
-              v-model="name"
-              :error-messages="nameErrors"
-              :counter="32"
-              label="Name"
-              required
-              @input="$v.name.$touch()"
-              @blur="$v.name.$touch()"
-              prepend-icon="mdi-account-circle"
-            ></v-text-field>
-            <!-- E-mail -->
             <v-text-field
               v-model="email"
               :error-messages="emailErrors"
@@ -27,67 +15,17 @@
               prepend-icon="mdi-email"
             ></v-text-field>
             <v-text-field
-              v-model="emailConfirm"
-              :error-messages="emailConfirmErrors"
-              label="Confirm E-mail"
-              required
-              @input="$v.emailConfirm.$touch()"
-              @blur="$v.emailConfirm.$touch()"
-              prepend-icon="mdi-email"
-            ></v-text-field>
-            <!-- Password -->
-            <v-text-field
-              label="Password"
               v-model="password"
+              label="password"
+              :error-messages="passwordErrors"
               :type="passwordType"
               prepend-icon="mdi-key"
               :append-outer-icon="eyeIcon"
-              :error-messages="passwordErrors"
               @click:append-outer="togglePasswordVisible"
               @input="$v.password.$touch()"
               @blur="$v.password.$touch()"
               required
             ></v-text-field>
-            <v-text-field
-              label="Confirm Password"
-              v-model="passwordConfirm"
-              :type="passwordType"
-              :error-messages="passwordConfirmErrors"
-              prepend-icon="mdi-key"
-              :append-outer-icon="eyeIcon"
-              @input="$v.passwordConfirm.$touch()"
-              @blur="$v.passwordConfirm.$touch()"
-              @click:append-outer="togglePasswordVisible"
-              required
-            ></v-text-field>
-            <!-- Country -->
-            <v-autocomplete
-              v-model="model"
-              :hint="
-                !isEditing ? 'Click the icon to edit' : 'Click the icon to save'
-              "
-              :items="countries"
-              :readonly="!isEditing"
-              :label="`Country — ${isEditing ? 'Editable' : 'Readonly'}`"
-              persistent-hint
-              prepend-icon="mdi-map"
-            >
-              <template v-slot:append-outer>
-                <v-slide-x-reverse-transition mode="out-in">
-                  <v-icon
-                    :key="`icon-${isEditing}`"
-                    :color="isEditing ? 'success' : 'info'"
-                    @click="isEditing = !isEditing"
-                    v-text="
-                      isEditing
-                        ? 'mdi-check-outline'
-                        : 'mdi-circle-edit-outline'
-                    "
-                  ></v-icon>
-                </v-slide-x-reverse-transition>
-              </template>
-            </v-autocomplete>
-
             <v-checkbox
               v-model="checkbox"
               :error-messages="checkboxErrors"
@@ -96,18 +34,23 @@
               @change="$v.checkbox.$touch()"
               @blur="$v.checkbox.$touch()"
             ></v-checkbox>
-            <v-row justify="space-around">
+            <v-row justify="space-between">
               <v-btn @click="submit" color="success">
                 submit
               </v-btn>
               <v-btn @click="clear" color="error">
                 clear
               </v-btn>
-              <v-btn color="secondary" outlined to="/sign-In">Sign in</v-btn>
+              <v-btn color="secondary" to="/sign-up" outlined>Sign Up?</v-btn>
             </v-row>
           </v-card-text>
         </v-card>
       </form>
+      <v-snackbar v-model="isUserId">
+        <v-btn text color="primary" @click.native="isUserId = false"
+          >Close</v-btn
+        >
+      </v-snackbar>
     </v-col>
   </v-row>
 </template>
@@ -119,20 +62,17 @@ import {
   required,
   maxLength,
   email,
-  sameAs,
   minLength,
   alphaNum
 } from "vuelidate/lib/validators";
-import countries from "../../data/countries";
+
 export default {
   mixins: [validationMixin],
 
   validations: {
-    name: { required, maxLength: maxLength(32) },
+    name: { required, maxLength: maxLength(10) },
     email: { required, email },
-    emailConfirm: { sameAsEmail: sameAs("email") },
     password: { required, minLength: minLength(8), alphaNum },
-    passwordConfirm: { sameAsPassword: sameAs("password") },
     select: { required },
     checkbox: {
       checked(val) {
@@ -144,12 +84,10 @@ export default {
   data: () => ({
     name: "",
     email: "",
-    emailConfirm: "",
     password: "",
-    passwordConfirm: "",
-    select: null,
     passwordType: "password",
     eyeIcon: "mdi-eye-off",
+    select: null,
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
     checkbox: false
   }),
@@ -171,7 +109,7 @@ export default {
       const errors = [];
       if (!this.$v.name.$dirty) return errors;
       !this.$v.name.maxLength &&
-        errors.push("Name must be at most 32 characters long");
+        errors.push("Name must be at most 10 characters long");
       !this.$v.name.required && errors.push("Name is required.");
       return errors;
     },
@@ -180,12 +118,6 @@ export default {
       if (!this.$v.email.$dirty) return errors;
       !this.$v.email.email && errors.push("Must be valid e-mail");
       !this.$v.email.required && errors.push("E-mail is required");
-      return errors;
-    },
-    emailConfirmErrors() {
-      const errors = [];
-      if (!this.$v.emailConfirm.$dirty) return errors;
-      !this.$v.emailConfirm.sameAsEmail && errors.push("E-mails must match");
       return errors;
     },
     passwordErrors() {
@@ -198,33 +130,21 @@ export default {
       !this.$v.password.required && errors.push("Password is required");
       return errors;
     },
-    passwordConfirmErrors() {
-      const errors = [];
-      if (!this.$v.passwordConfirm.$dirty) return errors;
-      !this.$v.passwordConfirm.sameAsPassword &&
-        errors.push("Passwords must match");
-      return errors;
+    isUserId() {
+      return !!this.$store.getters.userId;
     }
   },
 
   methods: {
-    ...mapActions(["signUp"]),
+    ...mapActions(["signIn"]),
     submit() {
       this.$v.$touch();
-      // this.$store.dispatch
-      this.signUp({
-        name: this.name,
-        email: this.email,
-        password: this.password
-      });
+      this.signIn({ email: this.email, password: this.password });
     },
     clear() {
       this.$v.$reset();
       this.name = "";
       this.email = "";
-      this.emailConfirm = "";
-      this.password = "";
-      this.passwordConfirm = "";
       this.select = null;
       this.checkbox = false;
     },
@@ -236,12 +156,6 @@ export default {
         this.passwordType = "password";
         this.eyeIcon = "mdi-eye-off";
       }
-    }
-  },
-
-  mounted: {
-    countries() {
-      return countries;
     }
   }
 };
