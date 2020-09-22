@@ -33,6 +33,11 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    autoLogout ({ dispatch }, logoutTime) {
+      setTimeout(() => {
+        dispatch('logout')
+      }, logoutTime * 1000);
+    },
     signUp({ commit, dispatch }, userData) {
       axios
         .post(
@@ -50,10 +55,11 @@ export default new Vuex.Store({
             userId: response.data.localId
           });
           dispatch("storeUser", userData);
+          dispatch('autoLogout', response.data.expiresIn)
         })
         .catch(errors => console.log(errors));
     },
-    signIn({ commit }, userData) {
+    signIn({ commit, dispatch }, userData) {
       axios
         .post(
           "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB0iXf21dGJYr-jgWXlVnyXeISv4ycScK8",
@@ -70,6 +76,7 @@ export default new Vuex.Store({
             userId: response.data.localId
           });
           router.replace("/");
+          dispatch('autoLogout', response.data.expiresIn)
         })
         .catch(errors => console.log(errors));
     },
@@ -104,6 +111,27 @@ export default new Vuex.Store({
             users.push(response.data[key]);
             // Adding only the first user
             commit("ADD_USER", users[0]);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    fetchUsers({ commit, state }) {
+      if (!state.auth.idToken) return;
+      axios
+        .get(
+          "https://vuejs-stock-trader-8b558.firebaseio.com/users.json" +
+            "?auth=" +
+            state.auth.idToken
+        )
+        .then(response => {
+          console.log(response.data);
+          const users = [];
+          for (const key in response.data) {
+            users.push(response.data[key]);
+            // Adding only the first user
+            commit("ADD_USERS", users);
           }
         })
         .catch(error => {

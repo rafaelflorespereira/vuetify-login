@@ -1,9 +1,9 @@
 <template>
   <v-row justify="center">
-    <v-col cols="3" align="center">
+    <v-col cols="12" sm="6" md="4" lg="2" align="center">
       <form>
         <h1>Sign-In Page</h1>
-        <v-card>
+        <v-card elevation="12">
           <v-card-text>
             <v-text-field
               v-model="email"
