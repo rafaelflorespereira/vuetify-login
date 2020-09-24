@@ -35,21 +35,17 @@
               @blur="$v.checkbox.$touch()"
             ></v-checkbox>
             <v-row justify="space-between">
-              <v-btn @click="submit" color="success">
-                submit
-              </v-btn>
-              <v-btn @click="clear" color="error">
-                clear
-              </v-btn>
+              <v-btn @click="submit" color="success">submit</v-btn>
+              <v-btn @click="clear" color="error">clear</v-btn>
               <v-btn color="secondary" to="/sign-up" outlined>Sign Up?</v-btn>
             </v-row>
           </v-card-text>
         </v-card>
       </form>
+      {{ isPossibleToSignIn }}
+      {{ this.passwordErrors.length }}
       <v-snackbar v-model="isUserId">
-        <v-btn text color="primary" @click.native="isUserId = false"
-          >Close</v-btn
-        >
+        <v-btn text color="primary" @click.native="isUserId = false">Close</v-btn>
       </v-snackbar>
     </v-col>
   </v-row>
@@ -132,6 +128,15 @@ export default {
     },
     isUserId() {
       return !!this.$store.getters.userId;
+    },
+    isPossibleToSignIn() {
+      if (
+        this.passwordErrors.length ||
+        this.emailErrors.length ||
+        this.checkboxErrors.length
+      )
+        return false;
+      else return true;
     }
   },
 
@@ -139,7 +144,8 @@ export default {
     ...mapActions(["signIn"]),
     submit() {
       this.$v.$touch();
-      this.signIn({ email: this.email, password: this.password });
+      if (this.isPossibleToSignIn)
+        this.signIn({ email: this.email, password: this.password });
     },
     clear() {
       this.$v.$reset();

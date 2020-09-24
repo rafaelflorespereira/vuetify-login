@@ -62,11 +62,13 @@
             ></v-text-field>
             <!-- Country -->
             <v-autocomplete
-              v-model="model"
+              v-model="countries"
               :hint="
                 !isEditing ? 'Click the icon to edit' : 'Click the icon to save'
               "
               :items="countries"
+              item-text="name"
+              item-value="name"
               :readonly="!isEditing"
               :label="`Country — ${isEditing ? 'Editable' : 'Readonly'}`"
               persistent-hint
@@ -97,12 +99,8 @@
               @blur="$v.checkbox.$touch()"
             ></v-checkbox>
             <v-row justify="space-around">
-              <v-btn @click="submit" color="success">
-                submit
-              </v-btn>
-              <v-btn @click="clear" color="error">
-                clear
-              </v-btn>
+              <v-btn @click="submit" color="success">submit</v-btn>
+              <v-btn @click="clear" color="error">clear</v-btn>
               <v-btn color="secondary" outlined to="/sign-In">Sign in</v-btn>
             </v-row>
           </v-card-text>
@@ -123,7 +121,7 @@ import {
   minLength,
   alphaNum
 } from "vuelidate/lib/validators";
-import countries from "../../data/countries";
+import countries from "../../data/countries.json";
 export default {
   mixins: [validationMixin],
 
@@ -153,9 +151,21 @@ export default {
     passwordType: "password",
     eyeIcon: "mdi-eye-off",
     items: ["Item 1", "Item 2", "Item 3", "Item 4"],
-    checkbox: false
+    checkbox: false,
+    isEditing: false,
+    countries,
+    model: null
   }),
 
+  created: {
+    countriesNames() {
+      var names = [];
+      for (const key in this.countries) {
+        console.log(countries[key]);
+        names.push(countries[key].name);
+      }
+    }
+  },
   computed: {
     checkboxErrors() {
       const errors = [];
@@ -245,12 +255,6 @@ export default {
         this.passwordType = "password";
         this.eyeIcon = "mdi-eye-off";
       }
-    }
-  },
-
-  mounted: {
-    countries() {
-      return countries;
     }
   }
 };

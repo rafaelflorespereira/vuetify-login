@@ -12,9 +12,7 @@
     </v-col>
     <v-snackbar v-model="snackbar.toggle" absolute>
       {{ snackbar.msg }}
-      <v-btn text color="primary" @click.native="snackbar.toggle = false"
-        >Close</v-btn
-      >
+      <v-btn text color="primary" @click.native="snackbar.toggle = false">Close</v-btn>
     </v-snackbar>
   </v-row>
 </template>
@@ -40,14 +38,22 @@ export default {
           align: "start"
         }
       ],
-      users: [],
       snackbar: {
         toggle: false,
         msg: ""
       }
     };
   },
-  created() {},
+  mounted() {
+    //fetch users from server store on local
+    this.$store.dispatch("fetchUsers");
+  },
+  computed: {
+    //get from local
+    users() {
+      return this.$store.getters.users;
+    }
+  },
   methods: {
     selectRow(event) {
       this.snackbar.toggle = !this.snackbar.toggle;

@@ -130,7 +130,6 @@ export default new Vuex.Store({
           const users = [];
           for (const key in response.data) {
             users.push(response.data[key]);
-            // Adding only the first user
             commit("ADD_USERS", users);
           }
         })
@@ -152,6 +151,9 @@ export default new Vuex.Store({
     },
     isAuthenticated(state) {
       return state.auth.idToken !== null;
+    },
+    users(state){
+      return state.users
     }
   }
 });
