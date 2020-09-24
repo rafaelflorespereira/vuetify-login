@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import axios from "axios";
 
 import router from "../router/index";
+import { Date } from "core-js";
 
 Vue.use(Vuex);
 
@@ -38,6 +39,22 @@ export default new Vuex.Store({
         dispatch('logout')
       }, logoutTime * 1000);
     },
+    autoLogin ({ commit }) {
+      if( !localStorage.getItem('userId')) return
+      else if (!localStorage.getItem('idToken')) return
+      else {
+      const now = new Date()
+      const expirationDate = new Date(localStorage.getItem('expirationDate'))
+      console.log(now, expirationDate, now < expirationDate)
+        if (now <= expirationDate) {
+          commit('AUTH_USER', {
+            idToken: localStorage.getItem('idToken'),
+            userId: localStorage.getItem('userId'),
+          })
+          router.replace("/");
+        }
+      }
+    },
     signUp({ commit, dispatch }, userData) {
       axios
         .post(
@@ -70,13 +87,19 @@ export default new Vuex.Store({
           }
         )
         .then(response => {
-          console.log(response);
           commit("AUTH_USER", {
             idToken: response.data.idToken,
             userId: response.data.localId
           });
           router.replace("/");
           dispatch('autoLogout', response.data.expiresIn)
+          /* Setting Data for auto-login */
+          const now = new Date()
+          const expirationDate = new Date(now.getTime() + response.data.expiresIn * 1000)
+          console.log(expirationDate)
+          localStorage.setItem('expirationDate', expirationDate)
+          localStorage.setItem('idToken', response.data.idToken)
+          localStorage.setItem('userId', response.data.localId)
         })
         .catch(errors => console.log(errors));
     },
@@ -139,6 +162,9 @@ export default new Vuex.Store({
     },
     logout({ commit }) {
       commit("AUTH_LOGOUT");
+      localStorage.removeItem('idToken')
+      localStorage.removeItem('userId')
+      localStorage.removeItem('expirationDate')
       router.replace("/sign-in");
     }
   },

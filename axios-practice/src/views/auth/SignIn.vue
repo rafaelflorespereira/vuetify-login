@@ -42,11 +42,6 @@
           </v-card-text>
         </v-card>
       </form>
-      {{ isPossibleToSignIn }}
-      {{ this.passwordErrors.length }}
-      <v-snackbar v-model="isUserId">
-        <v-btn text color="primary" @click.native="isUserId = false">Close</v-btn>
-      </v-snackbar>
     </v-col>
   </v-row>
 </template>

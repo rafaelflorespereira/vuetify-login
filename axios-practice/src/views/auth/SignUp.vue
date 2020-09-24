@@ -119,7 +119,7 @@ import {
   email,
   sameAs,
   minLength,
-  alphaNum
+  alphaNum,
 } from "vuelidate/lib/validators";
 import countries from "../../data/countries.json";
 export default {
@@ -136,13 +136,14 @@ export default {
     checkbox: {
       checked(val) {
         return val;
-      }
-    }
+      },
+    },
   },
 
   data: () => ({
     name: "",
     birthday: "",
+    country: "",
     email: "",
     emailConfirm: "",
     password: "",
@@ -154,7 +155,7 @@ export default {
     checkbox: false,
     isEditing: false,
     countries,
-    model: null
+    model: null,
   }),
 
   created: {
@@ -164,7 +165,7 @@ export default {
         console.log(countries[key]);
         names.push(countries[key].name);
       }
-    }
+    },
   },
   computed: {
     checkboxErrors() {
@@ -223,7 +224,7 @@ export default {
       !this.$v.birthday.required ||
         errors.push("Select Birthday from the Calendar Below");
       return errors;
-    }
+    },
   },
 
   methods: {
@@ -234,7 +235,9 @@ export default {
       this.signUp({
         name: this.name,
         email: this.email,
-        password: this.password
+        password: this.password,
+        birthday: this.birthday,
+        country: this.country,
       });
     },
     clear() {
@@ -255,7 +258,7 @@ export default {
         this.passwordType = "password";
         this.eyeIcon = "mdi-eye-off";
       }
-    }
-  }
+    },
+  },
 };
 </script>

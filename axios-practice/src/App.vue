@@ -26,6 +26,9 @@ export default {
   components: {
     AppBar,
     MyFooter
+  },
+  created(){
+    this.$store.dispatch('autoLogin')
   }
 };
 </script>
