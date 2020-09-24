@@ -16,6 +16,7 @@
               @blur="$v.name.$touch()"
               prepend-icon="mdi-account-circle"
             ></v-text-field>
+            <v-text-field name="age" v-model="birthday" type="number" label="label" id="id"></v-text-field>
             <!-- E-mail -->
             <v-text-field
               v-model="email"
@@ -62,7 +63,7 @@
             ></v-text-field>
             <!-- Country -->
             <v-autocomplete
-              v-model="countries"
+              v-model="country"
               :hint="
                 !isEditing ? 'Click the icon to edit' : 'Click the icon to save'
               "
@@ -89,7 +90,6 @@
                 </v-slide-x-reverse-transition>
               </template>
             </v-autocomplete>
-
             <v-checkbox
               v-model="checkbox"
               :error-messages="checkboxErrors"

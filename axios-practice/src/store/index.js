@@ -73,6 +73,7 @@ export default new Vuex.Store({
           });
           dispatch("storeUser", userData);
           dispatch('autoLogout', response.data.expiresIn)
+          router.replace("/");
         })
         .catch(errors => console.log(errors));
     },
